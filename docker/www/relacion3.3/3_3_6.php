@@ -6,6 +6,32 @@
   <title>Document</title>
 </head>
 <body>
-  
+  <?
+    $diccionario = [
+      "coche" => "car",
+      "avion" => "plane",
+      "camion" => "truck",
+      "moto" => "bike",
+      "manzana" => "apple",
+      "pera" => "pear",
+      "ventana" => "window",
+      "puerta" => "door",
+      "colegio" => "school",
+      "gimnasio" => "gym",
+      "bomba" => "book",
+      "boligrafo" => "pencil",
+      "fiesta" => "party",
+      "arbol" => "tree",
+      "roca" => "rock",
+      "oro" => "gold",
+      "plata" => "silver",
+      "cobre" => "copper",
+      "bicho" => "bug",
+      "fuego" => "fire"
+    ];
+    
+    echo "<h1>Diccionario</h1>"
+    
+  ?>
 </body>
 </html>
