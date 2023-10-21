@@ -9,13 +9,14 @@
   <?php
     $hora = $_POST["hora"];
     $min = $_POST["min"];
-  //segundos en un dia = 86400
+    
     if ($hora >= 24 || $min >= 60) {
       echo "Datos incorrectos";
     } elseif ($hora <0 || $min < 0) {
       echo "Datos incorrectos";
     } else {
-      
+      $seg = (24 * 60 * 60) - (($hora * 60 * 60) + ($min * 60));
+      echo "Segundos hasta medianoche: " . $seg . " segundos";
     }
 
   ?>
