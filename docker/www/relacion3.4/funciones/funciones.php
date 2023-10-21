@@ -64,11 +64,39 @@
 
       function posicionDeDigito($n , $digito) { //Funcion para dar la posicion de la primera ocurrencia de un digito dentro de un numero entero
         $num = strval($n);
-        $pos = strpos($num, strval($digito));
-        if ($pos !== false) {
-          return $pos;
+        $pos = -1;
+        for ($i = 0; $i < strlen($num); $i++) {
+          if ($num[$i] == $digito) {
+            $pos = $i;
+            break;
+          }
         }
-        return -1;
+        return $pos;
+      }
+
+      function quitarPorDetras($num , $n) { //Funcion para quitar n numeros por detras
+        return intval(substr(strval($num), 0, strlen(strval($num)) - $n));
+      }
+
+      function quitarPorDelante($num , $n) { //Funcion para quitar n numeros por delante
+        return intval(substr(strval($num) , $n));
+      }
+
+      function pegaPorDetras($num , $digito) { //Funcion para añadir un digito por detras
+        return intval(strval($num) . strval($digito));
+      }
+
+      function pegaPorDelante($num , $digito) { //Funcion para añadir un digito por delante
+        return intval(strval($digito) . strval($num));
+      }
+
+      function trozoDeNumero($num , $inicio , $fin) { //Funcion para devolver el trozo de numero cogido por un inicio y fin
+        $numStr = strval($num);
+        return intval(substr($numStr, $inicio, $fin - $inicio + 1));
+      }
+
+      function juntaNumeros($num1 , $num2) { //Funcion para pegar dos numeros
+        return intval(strval($num1) . strval($num2));
       }
 
       

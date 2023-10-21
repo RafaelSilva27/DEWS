@@ -8,24 +8,27 @@
 <body>
   <?php
     $array = [];
-    $array2 = [];
+    
     
     for ($i = 0; $i < 15; $i++) {
       $array[$i] = rand(0 , 100);
       echo $array[$i] .  " ";
     }
 
-    for ($i = 0; $i < 15; $i++){
-      $array2[$i+1] = $array[$i];
+    for ($i = 0; $i < 15; $i++) {
+      $aux = $array[$i];
+      $array[$i] = $array[0];
+      $array[0] = $aux;
     }
 
-    $array2[0] = end($array);
+    echo "<br><br> Segundo array:<br>";
 
-    // Mostrar el segundo array
-    echo "<br><br>Array 2:<br>";
-    foreach ($array2 as $value) {
-      echo $value . " ";
+    for ($i = 0; $i < 15; $i++) {
+      echo $array[$i] . " ";
     }
+
+    
+    
   ?>
 </body>
 </html>
