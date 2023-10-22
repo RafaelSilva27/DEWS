@@ -6,7 +6,7 @@
   <title>Document</title>
 </head>
 <body>
-  Introduce 10 numeros<br>
+  Introduce 10 numeros y te dire cuantos hay positivos y negativos<br>
   <form method="post" action="3_2_13b.php">
     Numero 1 <input type="text" name="num1"><br>
     Numero 2 <input type="text" name="num2"><br>
