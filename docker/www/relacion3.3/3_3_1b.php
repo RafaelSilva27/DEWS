@@ -7,18 +7,21 @@
 </head>
 <body>
   <?php
-    $numeros = [];
-   
-    for ($i = 0; $i < 20 ; $i++) {
-      $numero = rand(0, 100);
-      $numeros[$i]['numero'] = $numero;
-      $numeros[$i]['cuadrado'] = $numero * $numero;
-      $numeros[$i]['cubo'] = $numero * $numero * $numero;
+    $array = array(
+      "numero" => array(),
+      "cuadrado" => array(),
+      "cubota" => array()
+    );
 
+    for ($i = 0; $i < 20; $i++) {
+      $array["numero"][$i] = rand(0, 100);
+      $array["cuadrado"][$i] = $array["numero"][$i] * $array["numero"][$i];
+      $array["cubo"]["$i"] = $array["numero"][$i] * $array["numero"][$i] * $array["numero"][$i];
 
-      echo $numeros[$i]['numero'] . " " . $numeros[$i]['cuadrado'] . " " . $numeros[$i]['cubo'] . "<br>";
+      echo $array["numero"][$i] . " ";
+      echo $array["cuadrado"]["$i"] . " ";
+      echo $array["cubo"][$i] .  "<br>";
     }
-
   ?>
 </body>
 </html>
