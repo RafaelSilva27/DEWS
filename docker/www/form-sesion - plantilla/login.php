@@ -11,7 +11,7 @@
   session_start();
 
   if (isset($_POST['usuario']) && $_POST['password']){
-    $usuario = $_POST['usuario'];
+    $usuario = strtolower($_POST['usuario']);
     $password = $_POST['password'];
 
     if ($usuario == 'test' && $password == 'test') {
