@@ -1,4 +1,4 @@
-<?
+<?php
   session_start();
 ?>
 
@@ -9,7 +9,7 @@
   </head>
   <body>
 
-  <?
+  <?php
     if (!isset($_REQUEST["numero"])) {
       if (!isset($_SESSION["aleatorio"])) {
         $_SESSION["intentos"] = 4;
@@ -25,16 +25,26 @@
     } else {
       $n = $_REQUEST['numero'];
       $aleatorio = $_SESSION['aleatorio'];
-      $intentos = $_SESSION['intentos']--;
 
-			echo "Tu número es: $n<br>";
-			if ( $n == $aleatorio) {
+      echo "Tu número es: $n<br>";
+
+      if ($n == $aleatorio) {
         echo "La caja fuerte se ha abierto";
         session_destroy();
       } else {
-        echo "Has agotado los intentos";
-        session_destroy();
+        $_SESSION['intentos']--;
+
+        if ($_SESSION['intentos'] > 0) {
+          echo "Intentos restantes: " . $_SESSION['intentos'];
+        } else {
+          echo "Has agotado los intentos";
+          session_destroy();
+        }
       }
+
       echo "<br><a href='index.php'>Sigue jugando...</a>";
     }
   ?>
+  
+  </body>
+</html>
