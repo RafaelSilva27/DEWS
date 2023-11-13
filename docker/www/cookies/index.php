@@ -12,6 +12,14 @@
   <title>Document</title>
 </head>
 <body>
-  
+
+  <?php
+    if (isset($_COOKIE['usuario'])) {
+      echo "El valor de la cookie 'usuario' es: " . $_COOKIE['usuario'];
+    } else {
+      echo "La cookie 'usuario' no está establecida.";
+    }
+  ?>
+
 </body>
 </html>

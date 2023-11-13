@@ -12,18 +12,42 @@
 
   if (isset($_POST['usuario']) && $_POST['password']){
     $usuario = strtolower($_POST['usuario']);
-    $password = $_POST['password'];
+    $password = hash('sha512', $_POST['password']);
 
-    if ($usuario == 'test' && $password == 'test') {
-      $_SESSION['usuario'] = $usuario;
-      header("Location: contenido.php");
-    } else {
-      header("Location: registro.php");
-    }
-  } 
+    try {
+      $host = "db";
+      $dbUsername = "root";
+      $dbPassword = "test";
+      $dbName = "usuarios";
+      $conn = new PDO("mysql:host=$host;dbname=$dbName", $dbUsername, $dbPassword);
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  include("./views/login.view.php");
+      $statement = $conn->prepare('SELECT * FROM usuarios WHERE usuario = :usuario AND password = :password ');
+      $statement->execute(array(
+          ':usuario' => $usuario,
+          ':password' => $password
+      ));
 
+      $resultado = $statement->fetch();
 
+      if ($resultado) {
+        $_SESSION['usuario'] = $usuario;
+        header("Location: contenido.php");
+      } else {
+          header("Location: registro.php");
+      }
+  } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+  }
+}
+
+include("./views/login.view.php");
 ?>
+
+
+
+
+
+
+
 
