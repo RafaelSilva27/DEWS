@@ -2,12 +2,12 @@
 
 class Persona {
     private $nombre;
-    private $apellidos;
+    private $apellido;
     private $edad;
 
-    public function __construct($nombre, $apellidos, $edad) {
+    public function __construct($nombre, $apellido, $edad) {
         $this->nombre = $nombre;
-        $this->apellidos = $apellidos;
+        $this->apellido = $apellido;
         $this->edad = $edad;
     }
 
@@ -17,7 +17,7 @@ class Persona {
 
     public function __toString() {
         return "Nombre: " . $this->nombre . "<br>" .
-               "Apellidos: " . $this->apellidos . "<br>" .
+               "Apellido: " . $this->apellido . "<br>" .
                "Edad: " . $this->edad . " años";
     }
 }
