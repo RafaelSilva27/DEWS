@@ -15,6 +15,9 @@
 <body>
     <?php
 
+    require_once 'Autor.php';
+    require_once 'Libro.php';
+
     // Miramos el valor de la variable "action", si existe. Si no, le asignamos una acción por defecto
     if (isset($_REQUEST["action"])) {
         $action = $_REQUEST["action"];
@@ -77,7 +80,7 @@
 
                 // Ahora, la tabla con los datos de los libros
                 echo "<table border ='1'>";
-                while ($fila = $result->fetch_object()) {
+                while ($fila = $result->fetch_object('Libro')) {
                     echo "<tr>";
                     echo "<td>" . $fila->titulo . "</td>";
                     echo "<td>" . $fila->genero . "</td>";
@@ -119,7 +122,7 @@
         $db = new mysqli("db", "root", "test", "biblioteca");
         $result = $db->query("SELECT * FROM personas");
         echo "Autores: <select name='autor[]' multiple='true'>";
-        while ($fila = $result->fetch_object()) {
+        while ($fila = $result->fetch_object('Autor')) {
             echo "<option value='" . $fila->idPersona . "'>" . $fila->nombre . " " . $fila->apellido . "</option>";
         }
         echo "</select>";
@@ -156,7 +159,7 @@
             // Si la inserción del libro ha funcionado, continuamos insertando en la tabla "escriben"
             // Tenemos que averiguar qué idLibro se ha asignado al libro que acabamos de insertar
             $result = $db->query("SELECT MAX(idLibro) AS ultimoIdLibro FROM libros");
-            $idLibro = $result->fetch_object()->ultimoIdLibro;
+            $idLibro = $result->fetch_object("Libro")->ultimoIdLibro;
             // echo "idLibro " . $idLibro;
             // Ya podemos insertar todos los autores junto con el libro en "escriben"
             foreach ($autores as $idAutor) {
@@ -202,7 +205,7 @@
         $idLibro = $_REQUEST["idLibro"];
         $db = new mysqli("db", "root", "test", "biblioteca");
         $result = $db->query("SELECT * FROM libros WHERE libros.idLibro = '$idLibro'");
-        $libro = $result->fetch_object();
+        $libro = $result->fetch_object("Libro");
 
         // Creamos el formulario con los campos del libro
         // y lo rellenamos con los datos que hemos recuperado de la BD
@@ -223,17 +226,17 @@
         $autoresLibro = $db->query("SELECT idPersona FROM escriben WHERE idLibro = '$idLibro'");             // Obtener solo los autores del libro que estamos buscando
         // Vamos a convertir esa lista de autores del libro en un array de ids de personas
         $listaAutoresLibro = array();
-        while ($autor = $autoresLibro->fetch_assoc()) {
-            $listaAutoresLibro[] = $autor['idPersona'];
+        while ($autor = $autoresLibro->fetch_object("Autor")) {
+            $listaAutoresLibro[] = $autor->idPersona;
         }
 
         // Ya tenemos todos los datos para añadir el selector de autores al formulario
         echo "Autores: <select name='autor[]' multiple size='5'>";
-        while ($fila = $todosLosAutores->fetch_assoc()) {
-            if (in_array($fila['idPersona'], $listaAutoresLibro))
-                echo "<option value='" . $fila['idPersona'] . "' selected>" . $fila['nombre'] . " " . $fila['apellido'] . "</option>";
+        while ($fila = $todosLosAutores->fetch_object("Autor")) {
+            if (in_array($fila->idPersona, $listaAutoresLibro))
+            echo "<option value='$fila->idPersona' selected>$fila->nombre $fila->apellido</option>";
             else
-                echo "<option value='" . $fila['idPersona'] . "'>" . $fila['nombre'] . " " . $fila['apellido'] . "</option>";
+            echo "<option value='$fila->idPersona'>$fila->nombre $fila->apellido</option>";
         }
         echo "</select>";
 
@@ -319,15 +322,15 @@
                           </form><br>";
                 // Después, la tabla con los datos
                 echo "<table border ='1'>";
-                while ($fila = $result->fetch_assoc()) {
+                while ($fila = $result->fetch_object("Libro")) {
                     echo "<tr>";
-                    echo "<td>" . $fila['titulo'] . "</td>";
-                    echo "<td>" . $fila['genero'] . "</td>";
-                    echo "<td>" . $fila['numPaginas'] . "</td>";
-                    echo "<td>" . $fila['nombre'] . "</td>";
-                    echo "<td>" . $fila['apellido'] . "</td>";
-                    echo "<td><a href='index.php?action=formularioModificarLibro&idLibro=" . $fila['idLibro'] . "'>Modificar</a></td>";
-                    echo "<td><a href='index.php?action=borrarLibro&idLibro=" . $fila['idLibro'] . "'>Borrar</a></td>";
+                    echo "<td>" . $fila->titulo . "</td>";
+                    echo "<td>" . $fila->genero . "</td>";
+                    echo "<td>" . $fila->numPaginas . "</td>";
+                    echo "<td>" . $fila->nombre . "</td>";
+                    echo "<td>" . $fila->apellido . "</td>";
+                    echo "<td><a href='index.php?action=formularioModificarLibro&idLibro=" . $fila->idLibro . "'>Modificar</a></td>";
+                    echo "<td><a href='index.php?action=borrarLibro&idLibro=" . $fila->idLibro . "'>Borrar</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";

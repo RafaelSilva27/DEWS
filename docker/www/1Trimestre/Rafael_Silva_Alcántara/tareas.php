@@ -79,26 +79,26 @@ try {
 
     foreach ($tareas as $tarea) {
         echo "<tr>";
-        echo "<td>" . $tarea['id'] . "</td>";
-        echo "<td>" . $tarea['titulo'] . "</td>";
+        echo "<td>" . $tarea->id . "</td>";
+        echo "<td>" . $tarea->titulo . "</td>";
 
-        $descripcionCorta = substr($tarea['descripcion'], 0, 5);
+        $descripcionCorta = substr($tarea->descripcion, 0, 5);
 
-        echo "<td>" . $descripcionCorta . (strlen($tarea['descripcion']) > 5 ? '...' : '') . "</td>";
+        echo "<td>" . $descripcionCorta . (strlen($tarea->descripcion) > 5 ? '...' : '') . "</td>";
         
         echo "<td>
                 <form method='post'>
-                    <input type='hidden' name='eliminar-tarea' value='" . $tarea['id'] . "' />
+                    <input type='hidden' name='eliminar-tarea' value='" . $tarea->id . "' />
                     <input type='submit' value='Eliminar'/>
                 </form>
                 <form method='post'>
-                    <input type='hidden' name='modificar-tarea' value='" . $tarea['id'] . "' />
+                    <input type='hidden' name='modificar-tarea' value='" . $tarea->id . "' />
                     <input type='text' name='nuevo-titulo' placeholder='Nuevo Título' required/>
                     <input type='text' name='nueva-descripcion' placeholder='Nueva Descripción' required/>
                     <input type='submit' value='Modificar'/>
                 </form>
                 <form action='detalleTarea.php' method='get'>
-                    <input type='hidden' name='ver-detalle' value='" . $tarea['id'] . "'/>
+                    <input type='hidden' name='ver-detalle' value='" . $tarea->id . "'/>
                     <input type='submit' value='Ver Detalles'/>
                 </form>
             </td>";
@@ -131,7 +131,7 @@ function getTareasPendientes($conn) {
     $statement->bindParam(':usuario', $usuario);
     $statement->execute();
 
-    return $statement->fetchAll(PDO::FETCH_ASSOC);
+    return $statement->fetchAll(PDO::FETCH_OBJ);
 }
 ?>
 

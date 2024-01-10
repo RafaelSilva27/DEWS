@@ -23,13 +23,13 @@ try {
         $statement->bindParam(':tareaId', $tareaId);
         $statement->execute();
 
-        $tarea = $statement->fetch(PDO::FETCH_ASSOC);
+        $tarea = $statement->fetch(PDO::FETCH_OBJ);
 
         if ($tarea) {
             echo "<h1>Detalles de la tarea</h1>";
-            echo "<p>ID: " . $tarea['id'] . "</p>";
-            echo "<p>Titulo: " . $tarea['titulo'] . "</p>";
-            echo "<p>Descripcion: " . $tarea['descripcion'] . "</p>";
+            echo "<p>ID: " . $tarea->id . "</p>";
+            echo "<p>Titulo: " . $tarea->titulo . "</p>";
+            echo "<p>Descripcion: " . $tarea->descripcion . "</p>";
         } else {
             echo "<p>No tiene permisos para ver los detalles de esta tarea</p>";
         }
