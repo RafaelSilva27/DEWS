@@ -26,7 +26,7 @@
         header("Location: tareas.php");
         exit();
       } else {
-        $error = "Usuario o contraseña incorrectos";
+        echo "Usuario o contraseña incorrectos";
       } 
     } catch (PDOException $e) {
       $error = "Error: " . $e->getMessage();

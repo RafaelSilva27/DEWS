@@ -18,7 +18,7 @@
         $statement->execute(['usuario' => $usuario]);
 
         if ($statement->fetchColumn()) {
-          $error = "El usuario ya existe";
+          echo "El usuario ya existe";
         } else {
           $statement = $conn->prepare('INSERT INTO usuarios (usuario, password) VALUES (:usuario, :password)');
           $statement->execute([':usuario' => $usuario, ':password' => $password]);
