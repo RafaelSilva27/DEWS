@@ -4,6 +4,8 @@
     private $apellido;
     private $edad;
 
+    private $notas = array();
+
     public function __construct($nombre, $apellido, $edad) {
       $this->nombre = $nombre;
       $this->apellido = $apellido;
