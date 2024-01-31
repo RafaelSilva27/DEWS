@@ -110,7 +110,7 @@ class TareaController {
         $this->mostrarListaTareasUsuario($usuario);
     } else {
         echo "Usuario o contraseña incorrectos";
-        echo "<br><p><a href='login.php'>Volver</a></p>";
+        echo "<br><p><a href='index.php?action=mostrarLogin'>Volver</a></p>";
     }
 }
 
