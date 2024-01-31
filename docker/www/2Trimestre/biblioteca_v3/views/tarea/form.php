@@ -26,18 +26,7 @@ echo "<form action = 'index.php' method = 'get'>
         Descripcion:<input type='text' name='descripcion' value='".$descripcion."'><br>";
 
 
-// foreach ($todosLosAutores as $fila) {
-//     $idsAutoresLibro = array_map(function ($autorLibro) {
-//         return $autorLibro->idPersona;
-//     }, $autoresLibro);
-//     if (in_array($fila->idPersona, $idsAutoresLibro))
-//         echo "<option value='$fila->idPersona' selected>$fila->nombre $fila->apellido</option>";
-//     else
-//         echo "<option value='$fila->idPersona'>$fila->nombre $fila->apellido</option>";
-// }
-// echo "</select>";
 
-// Finalizamos el formulario
 if (isset($tarea)) {
     echo "  <input type='hidden' name='action' value='modificarTarea'>";
 } else {

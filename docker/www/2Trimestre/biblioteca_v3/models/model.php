@@ -30,4 +30,6 @@ class Model {
     $result = $this->db->dataManipulation("DELETE FROM ".$this->table." WHERE ".$this->idColumn." = $id");
     return $result;
   }
+
+  
 }

@@ -4,11 +4,7 @@
 // Recuperamos la lista de libros
 $listaTareas = $data["listaTareas"];
 
-echo "<form action='index.php'>
-        <input type='hidden' name='action' value='buscarLibros'>
-        <input type='text' name='textoBusqueda'>
-        <input type='submit' value='Buscar'>
-      </form><br>";
+
 
 // Ahora, la tabla con los datos de los libros
 if (count($listaTareas) == 0) {
@@ -27,3 +23,5 @@ if (count($listaTareas) == 0) {
   echo "</table>";
 }
 echo "<p><a href='index.php?action=formularioInsertarTareas'>Nuevo</a></p>";
+
+echo "<p><a href='index.php?action=cerrarSesion'>Cerrar sesión</a></p>";

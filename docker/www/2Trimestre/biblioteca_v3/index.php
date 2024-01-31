@@ -1,21 +1,19 @@
-<!-- BIBLIOTECA VERSIÓN 3
-     Características de esta versión:
-       - Código con arquitectura MVC
-       - Un solo controlador
-       - Con capa de abstracción de datos
--->
 <?php
-    include_once("TareaController.php");  
+session_start();
 
-    // Miramos el valor de la variable "action", si existe. Si no, le asignamos una acción por defecto
-    if (isset($_REQUEST["action"])) {
-        $action = $_REQUEST["action"];
+include_once("TareaController.php");
+
+if (isset($_REQUEST["action"])) {
+    $action = $_REQUEST["action"];
+    $listaTareas = new TareaController();
+
+    if ($action === "cerrarSesion") {
+        $listaTareas->cerrarSesion();
     } else {
-        $action = "mostrarListaTareas";  // Acción por defecto
+        $listaTareas->$action();
     }
-
-    // Creamos un objeto de tipo Biblioteca y llamamos al método $action()
+} else {
+    $action = "mostrarLogin";
     $listaTareas = new TareaController();
     $listaTareas->$action();
-
-    
+}

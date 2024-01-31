@@ -1,13 +1,13 @@
 <?php
 
-// MODELO DE LIBROS
+// MODELO DE TAREAS
 
 include_once "model.php";
 
 class Tarea extends Model
 {
 
-    // Constructor. Especifica el nombre de la tabla de la base de datos
+
     public function __construct()
     {
         $this->table = "tarea";
@@ -15,64 +15,62 @@ class Tarea extends Model
         parent::__construct();
     }
 
-    // Devuelve el último id asignado en la tabla de libros
     public function getMaxId()
     {
         $result = $this->db->dataQuery("SELECT MAX(id) AS ultimoIdTarea FROM tarea");
         return $result[0]->ultimoIdTarea;
     }
 
-    // Inserta un libro. Devuelve 1 si tiene éxito o 0 si falla.
-    public function insert($titulo, $descripcion)
-    {
-        return $this->db->dataManipulation("INSERT INTO tarea (titulo,descripcion) VALUES ('$titulo','$descripcion')");
-    }
-
-    // Inserta los autores de un libro. Recibe el id del libro y la lista de ids de los autores en forma de array.
-    // Devuelve el número de autores insertados con éxito (0 en caso de fallo).
-    public function insertAutores($idLibro, $autores)
-    {
-        $correctos = 0;
-        foreach ($autores as $idAutor) {
-            $sql = "INSERT INTO escriben(idLibro, idPersona) VALUES('$idLibro', '$idAutor')";
-            $correctos += $this->db->dataManipulation($sql);
+    public function insertTareaConUsuario($titulo, $descripcion, $usuario) {
+        $sqlInsertTarea = "INSERT INTO tarea (titulo, descripcion) VALUES ('$titulo', '$descripcion')";
+        $resultInsertTarea = $this->db->dataManipulation($sqlInsertTarea);
+    
+        if ($resultInsertTarea) {
+            $idTarea = $this->getMaxId();
+    
+            $idUsuario = $_SESSION['id_usuario'];  
+    
+            $sqlAsociarUsuario = "INSERT INTO usuarios_tarea (tarea, usuario) VALUES ($idTarea, $idUsuario)";
+            $resultAsociarUsuario = $this->db->dataManipulation($sqlAsociarUsuario);
+    
+            if (!$resultAsociarUsuario) {
+                echo "Error al insertar en usuarios_tarea: " . $this->db->getLastError();
+            }
+    
+            return $resultAsociarUsuario;
         }
-        return $correctos;
+    
+        return false;
     }
-
-    // Elimina los autores de un libro. Recibe el id del libro y la lista de ids de los autores en forma de array.
-    // Devuelve el número de autores insertados con éxito (0 en caso de fallo).
-    public function deleteAutores($idLibro)
-    {
-        $correctos = 0;
-        $sql = "DELETE FROM escriben WHERE idLibro = $idLibro";
-        $correctos = $this->db->dataManipulation($sql);
-        return $correctos;
-    }
-
-    // Actualiza un libro (todo menos sus autores). Devuelve 1 si tiene éxito y 0 en caso de fallo.
+    
+    
     public function update($idTarea, $titulo, $descripcion)
     {
-        $ok = $this->db->dataManipulation("UPDATE tarea SET
-                                titulo = '$titulo',
-                                descripcion = '$descripcion'
-                                WHERE id = '$idTarea'");
-        return $ok;
+        $sql = "UPDATE tarea SET
+                titulo = '$titulo',
+                descripcion = '$descripcion'
+                WHERE id = '$idTarea'";
+        return $this->db->dataManipulation($sql);
     }
 
-    // Busca un texto en las tablas de libros y autores. Devuelve un array de objetos con todos los libros
-    // que cumplen el criterio de búsqueda.
-    public function search($textoBusqueda)
+
+    public function getTareasPorUsuario($usuario)
     {
-        // Buscamos los libros de la biblioteca que coincidan con el texto de búsqueda
-        $result = $this->db->dataQuery("SELECT * FROM libros
-					                    INNER JOIN escriben ON libros.idLibro = escriben.idLibro
-					                    INNER JOIN personas ON escriben.idPersona = personas.idPersona
-					                    WHERE libros.titulo LIKE '%$textoBusqueda%'
-					                    OR libros.genero LIKE '%$textoBusqueda%'
-					                    OR personas.nombre LIKE '%$textoBusqueda%'
-					                    OR personas.apellido LIKE '%$textoBusqueda%'
-					                    ORDER BY libros.titulo");
-        return $result;
+        $sql = "SELECT tarea.* FROM tarea
+                INNER JOIN usuarios_tarea ON tarea.id = usuarios_tarea.tarea
+                INNER JOIN usuarios ON usuarios_tarea.usuario = usuarios.id
+                WHERE usuarios.usuario = '$usuario'";
+        return $this->db->dataQuery($sql);
     }
+
+    public function deleteFromUsuariosTarea($idTarea)
+    {
+        $sqlDeleteUsuariosTarea = "DELETE FROM usuarios_tarea WHERE tarea = '$idTarea'";
+        $resultDeleteUsuariosTarea = $this->db->dataManipulation($sqlDeleteUsuariosTarea);
+
+        $resultDeleteTarea = $this->delete($idTarea);
+
+        return $resultDeleteUsuariosTarea && $resultDeleteTarea;
+    }
+
 }
