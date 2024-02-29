@@ -54,14 +54,13 @@ class Tarea extends Model
     }
 
 
-    public function getTareasPorUsuario($usuario)
-    {
-        $sql = "SELECT tarea.* FROM tarea
-                INNER JOIN usuarios_tarea ON tarea.id = usuarios_tarea.tarea
-                INNER JOIN usuarios ON usuarios_tarea.usuario = usuarios.id
-                WHERE usuarios.usuario = '$usuario'";
-        return $this->db->dataQuery($sql);
-    }
+    public function getTareasPorUsuario($idUsuario)
+{
+    $sql = "SELECT tarea.* FROM tarea
+            INNER JOIN usuarios_tarea ON tarea.id = usuarios_tarea.tarea
+            WHERE usuarios_tarea.usuario = '$idUsuario'";
+    return $this->db->dataQuery($sql);
+}
 
     public function deleteFromUsuariosTarea($idTarea)
     {

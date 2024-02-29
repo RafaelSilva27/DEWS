@@ -6,3 +6,5 @@
 </form>
 
 <p>No tienes una cuenta? <a href='index.php?action=mostrarRegistro'>Regístrate aquí</a></p>
+
+

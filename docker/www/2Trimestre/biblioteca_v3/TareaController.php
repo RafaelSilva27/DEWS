@@ -16,7 +16,7 @@ class TareaController {
 
     // --------------------------------- MOSTRAR LISTA DE LIBROS ----------------------------------------
     public function mostrarListaTareas() {
-        $usuario = $_SESSION["usuario"];
+        $usuario = $_SESSION["usuario"]; 
         $data["listaTareas"] = $this->tarea->getTareasPorUsuario($usuario);
         View::render("tarea/all", $data);
     }
@@ -24,7 +24,7 @@ class TareaController {
     // --------------------------------- FORMULARIO ALTA DE LIBROS ----------------------------------------
 
     public function formularioInsertarTareas() {
-        $data["autoresLibro"] = array();  // Array vacío (el libro aún no tiene autores asignados)
+        $data["autoresLibro"] = array(); 
         View::render("tarea/form", $data);
     }
 
@@ -34,13 +34,12 @@ class TareaController {
         try {
             $titulo = $_REQUEST["titulo"];
             $descripcion = $_REQUEST["descripcion"];
-            $usuario = $_SESSION["usuario"];
+            $idUsuario = $_SESSION["id_usuario"]; 
     
-            $result = $this->tarea->insertTareaConUsuario($titulo, $descripcion, $usuario);
+            $result = $this->tarea->insertTareaConUsuario($titulo, $descripcion, $idUsuario); 
     
             if ($result) {
-                $usuario = $_SESSION["usuario"];
-                $data["listaTareas"] = $this->tarea->getTareasPorUsuario($usuario);
+                $data["listaTareas"] = $this->tarea->getTareasPorUsuario($idUsuario); 
                 View::render("tarea/all", $data);
                 exit(); 
             } else {
@@ -57,13 +56,26 @@ class TareaController {
     // --------------------------------- BORRAR LIBROS ----------------------------------------
 
     public function borrarTarea() {
+        if (!isset($_SESSION["id_usuario"])) { 
+            echo "Error: No se ha iniciado sesión correctamente.";
+            exit();
+        }
+        
+        if (!isset($_REQUEST["id"])) {
+            echo "Error: Falta el ID de la tarea a borrar.";
+            exit();
+        }
         $idTarea = $_REQUEST["id"];
-    
+        
         $result = $this->tarea->deleteFromUsuariosTarea($idTarea);
-    
-        $usuario = $_SESSION["usuario"];
-        $data["listaTareas"] = $this->tarea->getTareasPorUsuario($usuario);
-        View::render("tarea/all", $data);
+        
+        if ($result) {
+            $idUsuario = $_SESSION["id_usuario"];
+            $data["listaTareas"] = $this->tarea->getTareasPorUsuario($idUsuario);
+            View::render("tarea/all", $data);
+        } else {
+            echo "Error: No se pudo borrar la tarea.";
+        }
     }
 
     // --------------------------------- FORMULARIO MODIFICAR LIBROS ----------------------------------------
@@ -81,64 +93,62 @@ class TareaController {
         $idTarea = $_REQUEST["idTarea"];
         $titulo = $_REQUEST["titulo"];
         $descripcion = $_REQUEST["descripcion"];
-    
+        
         $result = $this->tarea->update($idTarea, $titulo, $descripcion);
-    
-        $usuario = $_SESSION["usuario"];
-        $data["listaTareas"] = $this->tarea->getTareasPorUsuario($usuario);
-        View::render("tarea/all", $data);
-        exit();  
+        
+        if ($result) {
+            $idUsuario = $_SESSION["id_usuario"];
+            $data["listaTareas"] = $this->tarea->getTareasPorUsuario($idUsuario);
+            View::render("tarea/all", $data);
+        } else {
+            echo "Error: No se pudo modificar la tarea.";
+        }
+        exit();
     }
     
 
 
     public function iniciarSesion()
 {
- 
     $usuario = $_POST['usuario'];
     $password = $_POST['password'];
-
 
     $usuariosModel = new Usuarios();
     $usuarioValido = $usuariosModel->login($usuario, $password);
 
     if ($usuarioValido) {
         $idUsuario = $usuariosModel->getUserIdFromUsername($usuario);
-
         $_SESSION['id_usuario'] = $idUsuario;
-
-        $this->mostrarListaTareasUsuario($usuario);
+        $this->mostrarListaTareasUsuario($idUsuario);
     } else {
         echo "Usuario o contraseña incorrectos";
         echo "<br><p><a href='index.php?action=mostrarLogin'>Volver</a></p>";
     }
 }
 
-    public function mostrarListaTareasUsuario($usuario)
-    {
+public function mostrarListaTareasUsuario($idUsuario)
+{
+    $listaTareas = $this->tarea->getTareasPorUsuario($idUsuario); 
+    View::render("tarea/all", ['listaTareas' => $listaTareas]);
+}
+    
 
-        $listaTareas = $this->tarea->getTareasPorUsuario($usuario);
 
-        View::render("tarea/all", ['listaTareas' => $listaTareas]);
+public function registrarUsuario() {
+    $usuario = $_POST['usuario'];
+    $password = $_POST['password'];
+
+    $usuariosModel = new Usuarios();
+
+    $registroExitoso = $usuariosModel->register($usuario, $password);
+
+    if ($registroExitoso) {
+        header("Location: index.php?action=mostrarLogin");
+        exit();
+    } else {
+        echo "Error en el registro. Por favor, inténtalo de nuevo.";
     }
-
-    public function registrarUsuario()
-    {
-
-        $usuario = $_POST['usuario'];
-        $password = $_POST['password'];
-
-        $usuariosModel = new Usuarios();
-
-        $registroExitoso = $usuariosModel->register($usuario, $password);
-
-        if ($registroExitoso) {
-            echo "Registro exitoso. Ahora puedes iniciar sesión.";
-            echo "<br><a href='index.php?action=mostrarLogin'>Iniciar sesión</a>"; 
-        } else {
-            echo "Error en el registro. Por favor, inténtalo de nuevo.";
-        }
-    }
+}
 
     public function cerrarSesion() {
         session_destroy();

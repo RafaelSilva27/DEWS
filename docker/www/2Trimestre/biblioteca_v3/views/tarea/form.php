@@ -7,9 +7,9 @@ extract($data);   // Extrae el contenido de $data y lo convierte en variables in
 // Vamos a usar la misma vista para insertar y modificar. Para saber si hacemos una cosa u otra,
 // usaremos la variable $libro: si existe, es porque estamos modificando un libro. Si no, estamos insertando uno nuevo.
 if (isset($tarea)) {   
-    echo "<h1>Modificación de libros</h1>";
+    echo "<h1>Modificación de Tareas</h1>";
 } else {
-    echo "<h1>Inserción de libros</h1>";
+    echo "<h1>Inserción de Tareas</h1>";
 }
 
 // Sacamos los datos del libro (si existe) a variables individuales para mostrarlo en los inputs del formulario.

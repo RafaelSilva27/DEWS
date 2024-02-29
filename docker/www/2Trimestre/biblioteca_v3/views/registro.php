@@ -5,4 +5,5 @@
     <input type='submit' value='Registrar'>
 </form>
 
+
 <p><a href='index.php?action=mostrarLogin'>Volver</a></p>

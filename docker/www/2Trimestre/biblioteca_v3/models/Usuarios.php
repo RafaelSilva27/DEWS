@@ -10,12 +10,13 @@ class Usuarios extends Model
     }
 
     public function register($usuario, $password)
-    {
-        $hashedPassword = hash('sha512', $password);
+{
+    $hashedPassword = hash('sha512', $password);
 
-        $result = $this->db->dataManipulation("INSERT INTO usuarios (usuario, password) VALUES ('$usuario', '$hashedPassword')");
-        return $result;
-    }
+    $result = $this->db->dataManipulation("INSERT INTO usuarios (usuario, password) VALUES ('$usuario', '$hashedPassword')");
+    return $result;
+}
+
 
     public function getUserIdFromUsername($username)
     {
